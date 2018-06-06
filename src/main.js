@@ -11,6 +11,10 @@ import {
   VIcon,
   VGrid,
   VToolbar,
+  VJumbotron,
+  VDivider,
+  VCard,
+  VProgressCircular,
   transitions
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
@@ -25,11 +29,15 @@ Vue.use(Vuetify, {
     VIcon,
     VGrid,
     VToolbar,
+    VJumbotron,
+    VDivider,
+    VCard,
+    VProgressCircular,
     transitions
   },
   theme: {
-    primary: '#ee44aa',
-    secondary: '#424242',
+    primary: '#FF4081',
+    secondary: '#36C9C6',
     accent: '#82B1FF',
     error: '#FF5252',
     info: '#2196F3',
