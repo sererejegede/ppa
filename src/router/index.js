@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import SignIn from '@/components/Users/SignIn'
-import SignUp from '@/components/Users/SignUp'
+import SignIn from '@/components/Auth/SignIn'
+import SignUp from '@/components/Auth/SignUp'
 import Companies from '@/components/PM/Companies'
 import Company from '@/components/PM/Company'
 

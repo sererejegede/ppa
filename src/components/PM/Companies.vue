@@ -1,13 +1,13 @@
 <template>
   <v-container>
-    <v-layout class="mb-5 mt-5">
+    <v-layout class="my-5">
       <v-flex xs12 sm10 offset-sm1>
         <h3 class="display-2">Companies</h3>
       </v-flex>
     </v-layout>
     <v-layout class="text-xs-center" v-if="loading">
       <v-flex xs12 sm10 offset-sm1>
-        <v-progress-circular indeterminate></v-progress-circular>
+        <v-progress-circular indeterminate color="secondary"></v-progress-circular>
       </v-flex>
     </v-layout>
     <v-layout v-for="company in companies" :key="company.id" class="mb-2" v-if="!loading">
