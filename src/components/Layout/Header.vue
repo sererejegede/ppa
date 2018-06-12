@@ -40,8 +40,8 @@
           {icon: 'account_circle', title: 'Users', link: '/'},
           {icon: 'dns', title: 'Companies', link: '/companies'},
           {icon: 'view_day', title: 'Projects', link: '/'},
-          {icon: 'face', title: 'Sign Up', link: '/signin'},
-          {icon: 'lock_open', title: 'Sign In', link: '/signup'}
+          {icon: 'face', title: 'Sign Up', link: '/signup'},
+          {icon: 'lock_open', title: 'Sign In', link: '/signin'}
         ]
       }
     },

@@ -1,0 +1,93 @@
+<v-container>
+  <v-layout class="my-5">
+    <v-flex xs12 sm10 offset-sm1>
+      <h3 class="display-2">Companies</h3>
+    </v-flex>
+  </v-layout>
+  <!--<v-layout v-for="company in allCompanies" :key="company.id" class="mb-2" v-if="!loading">-->
+    <!--<v-flex xs12 sm10 offset-sm1>-->
+      <!--<v-card>-->
+        <!--<v-card-title primary-title>-->
+          <!--<div>-->
+            <!--<h3 class="headline mb-0">{{ company.name }}</h3>-->
+            <!--<div>{{ company.description}}</div>-->
+          <!--</div>-->
+        <!--</v-card-title>-->
+        <!--<v-card-actions>-->
+          <!--<v-spacer></v-spacer>-->
+          <!--<v-btn flat class="secondary" :to="`companies/${company.id}`">-->
+            <!--<v-icon left>arrow_forward</v-icon>-->
+            <!--View Details-->
+          <!--</v-btn>-->
+        <!--</v-card-actions>-->
+      <!--</v-card>-->
+    <!--</v-flex>-->
+  <!--</v-layout>-->
+  <v-layout>
+    <v-flex xs12 sm12>
+      <v-card class="mb-5">
+        <v-card-title>
+          Companies
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-dialog v-model="dialog" max-width="500px">
+          <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field v-model="editedItem.description" label="Description" multi-line></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn flat @click.native="close">Cancel</v-btn>
+              <v-btn flat @click.native="save" :loading="loading">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-data-table
+          :headers="headers"
+          :items="allCompanies"
+          :search="search"
+          :loading="loading"
+        >
+          <template slot="items" slot-scope="props">
+            <td>{{ props.item.id }}</td>
+            <td><router-link :to="`companies/${props.item.id}`">{{ props.item.name }}</router-link></td>
+            <td>{{ props.item.description }}</td>
+            <td>{{ props.item.created_at | date}}</td>
+            <td>{{ props.item.updated_at | date}}</td>
+            <td class="justify-center layout px-0">
+              <v-btn icon class="mx-0" @click="editItem(props.item)">
+                <v-icon color="teal">edit</v-icon>
+              </v-btn>
+              <v-btn icon class="mx-0" @click="deleteItem(props.item)">
+                <v-icon color="pink">delete</v-icon>
+              </v-btn>
+            </td>
+          </template>
+          <v-alert slot="no-results" :value="true" color="error" icon="warning">
+            Your search for "{{ search }}" found no results.
+          </v-alert>
+        </v-data-table>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</v-container>

@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
+import VueResource from 'vue-resource'
 import App from './App'
 import router from './router'
 import {
@@ -15,9 +17,24 @@ import {
   VDivider,
   VCard,
   VProgressCircular,
+  VDataTable,
+  VtextField,
+  VSelect,
+  VDialog,
+  VForm,
   transitions
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
+import moment from 'moment'
+
+  /** Date Filter */
+Vue.filter('date', function (value) {
+  if (value) {
+    return moment(value).format('MMM Do [,] YYYY')
+  }
+})
+
+Vue.use(VueResource)
 
 Vue.use(Vuetify, {
   components: {
@@ -33,6 +50,11 @@ Vue.use(Vuetify, {
     VDivider,
     VCard,
     VProgressCircular,
+    VDataTable,
+    VtextField,
+    VSelect,
+    VDialog,
+    VForm,
     transitions
   },
   theme: {
@@ -45,6 +67,8 @@ Vue.use(Vuetify, {
     warning: '#FFC107'
   }
 })
+
+Vue.use(Vuex)
 
 Vue.config.productionTip = false
 

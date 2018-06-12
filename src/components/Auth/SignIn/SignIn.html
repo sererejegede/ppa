@@ -1,0 +1,26 @@
+<v-container>
+  <v-layout class="my-5">
+    <v-flex xs12 sm10 md6 offset-sm1 offset-md3>
+      <v-card raised>
+        <v-card-title>
+          <span class="headline">Sign In</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form lazy-validation>
+            <v-flex>
+              <v-text-field required v-model="signInUser.email" type="email" label="Email"></v-text-field>
+            </v-flex>
+            <v-flex>
+              <v-text-field required v-model="signInUser.password" type="password" label="Password"></v-text-field>
+            </v-flex>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary">Cancel</v-btn>
+          <v-btn color="secondary" :loading="loader.creating" @click.native="signIn">Submit</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</v-container>
