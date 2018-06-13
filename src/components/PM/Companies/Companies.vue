@@ -1,6 +1,8 @@
-<template src="./companies.html"></template>
+<template src="./Companies.html"></template>
 
 <script>
+  import API from '../../../helpers/API'
+
   export default {
     name: 'Companies',
     data () {
@@ -10,7 +12,7 @@
         dialog: false,
         editedIndex: -1,
         search: '',
-        editedItem: {
+        editedCompany: {
           name: '',
           description: ''
         },
@@ -33,23 +35,11 @@
         val || this.close()
       }
     },
-    created () {
-      // this.loading = true
-      // fetch('http://localhost:8000/api/companies')
-      //   .then(res => res.json())
-      //   .then((result) => {
-      //     this.loading = false
-      //     console.log('Success', result)
-      //     this.allCompanies = result
-      //   }, (error) => {
-      //     this.loading = false
-      //     console.log('Error', error)
-      //   })
-    },
+    created () {},
     methods: {
       editItem (item) {
         this.editedIndex = this.allCompanies.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+        this.editedCompany = Object.assign({}, item)
         this.dialog = true
         console.log(item)
       },
@@ -60,26 +50,14 @@
       close () {
         this.dialog = false
         setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedCompany = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
       },
       save () {
         this.loading = true
-        this.editedItem['user_id'] = 2
-        // this.$http.post('http://localhost:8000/api/companies', this.editedItem)
-        //   .then(result => {
-        //     console.log(result)
-        //   }, error => { console.log(error) })
-        fetch('http://localhost:8000/api/companies', {
-          method: 'POST',
-          body: JSON.stringify(this.editedItem),
-          headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(res => res.json())
+        this.editedCompany['user_id'] = 2
+        API.post('companies', this.editedCompany)
           .then((result) => {
             this.loading = false
             console.log('Success', result)
@@ -98,15 +76,14 @@
     },
     mounted () {
       this.loading = true
-      fetch('http://localhost:8000/api/companies')
-        .then(res => res.json())
+      API.get('companies')
         .then((result) => {
           this.loading = false
           console.log('Success', result)
           if (result && result.code === 401) {
             return
           }
-          this.allCompanies = result
+          this.allCompanies = result.body.data
         }, (error) => {
           this.loading = false
           console.log('Error', error)

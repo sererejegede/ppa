@@ -1,0 +1,41 @@
+<v-container>
+  <div v-if="!loading && company !== null">
+    <v-jumbotron>
+      <v-container fill-height>
+        <v-layout align-center>
+          <v-flex>
+            <h3 class="display-3">{{ company.name }}</h3>
+            <span class="subheading">{{ company.description }}</span>
+            <v-divider class="my-3"></v-divider>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-jumbotron>
+    <v-container fluid grid-list-md>
+      <v-layout row wrap>
+        <v-flex v-for="project in company.projects" :key="project.id" xs12 sm6 md3 lg3 class="pa-1">
+          <v-card height="100%">
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">{{ project.name }}</h3>
+                <div>{{ project.description}}</div>
+              </div>
+            </v-card-title>
+            <!--<v-card-actions>-->
+            <!--<v-spacer></v-spacer>-->
+            <!--<v-btn flat class="secondary" :to="`companies/${company.id}`">-->
+            <!--<v-icon left>arrow_forward</v-icon>-->
+            <!--View Details-->
+            <!--</v-btn>-->
+            <!--</v-card-actions>-->
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
+  <v-layout class="text-xs-center" v-if="loading">
+    <v-flex xs12 sm10 offset-sm1>
+      <v-progress-circular indeterminate color="secondary"></v-progress-circular>
+    </v-flex>
+  </v-layout>
+</v-container>

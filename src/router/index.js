@@ -10,11 +10,11 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {path: '/', name: 'home', component: Home},
-    {path: '/companies', name: 'companies', component: Companies},
-    {path: '/companies/:id', name: 'company', component: Company},
-    {path: '/signin', name: 'signin', component: SignIn},
-    {path: '/signup', name: 'signup', component: SignUp}
+    {path: '/', name: 'home', component: Home, meta: {requiresAuth: true}},
+    {path: '/companies', name: 'companies', component: Companies, meta: {requiresAuth: true}},
+    {path: '/companies/:id', name: 'company', component: Company, meta: {requiresAuth: true}},
+    {path: '/signin', name: 'signin', component: SignIn, meta: {requiresAuth: false}},
+    {path: '/signup', name: 'signup', component: SignUp, meta: {requiresAuth: false}}
   ],
   mode: 'history'
 })

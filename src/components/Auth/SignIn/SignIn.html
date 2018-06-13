@@ -6,19 +6,32 @@
           <span class="headline">Sign In</span>
         </v-card-title>
         <v-card-text>
-          <v-form lazy-validation>
+          <v-form>
             <v-flex>
-              <v-text-field required v-model="signInUser.email" type="email" label="Email"></v-text-field>
+              <v-text-field
+                required
+                v-model="signInUser.email"
+                type="email"
+                :error-messages="emailErrors"
+                @blur="$v.signInUser.email.$touch()"
+                @input="$v.signInUser.email.$touch()"
+                label="Email"></v-text-field>
             </v-flex>
             <v-flex>
-              <v-text-field required v-model="signInUser.password" type="password" label="Password"></v-text-field>
+              <v-text-field
+                required
+                v-model="signInUser.password"
+                :error-messages="passwordErrors"
+                @blur="$v.signInUser.password.$touch()"
+                type="password"
+                label="Password"></v-text-field>
             </v-flex>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary">Cancel</v-btn>
-          <v-btn color="secondary" :loading="loader.creating" @click.native="signIn">Submit</v-btn>
+          <v-btn color="secondary" :loading="loader.creating" @click="signIn">Submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
