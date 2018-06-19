@@ -5,6 +5,9 @@
         <v-card-title>
           <span class="headline">Sign In</span>
         </v-card-title>
+        <v-alert v-model="alertMessage.bool" :color="alertMessage.type" transition="scale-transition" dismissible>
+          <div v-for="message in alertMessage.messages" :key="message">{{ message }}</div>
+        </v-alert>
         <v-card-text>
           <v-form>
             <v-flex>
@@ -31,7 +34,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary">Cancel</v-btn>
-          <v-btn color="secondary" :loading="loader.creating" @click="signIn">Submit</v-btn>
+          <v-btn color="secondary" :loading="loader.creating" @click="signIn" :disabled="$v.signInUser.$invalid">Submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>

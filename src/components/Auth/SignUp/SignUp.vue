@@ -84,7 +84,6 @@
             this.alertMessage.messages.push(`${result.body.data.name} created successfully`)
           }, error => {
             console.log('Error', error)
-            this.alertMessage.messages = []
             if (error && error.body && error.body.errors) {
               this.handleErrors(error.body.errors)
             }
@@ -92,6 +91,7 @@
           })
       },
       handleErrors (errors) {
+        this.alertMessage.messages = []
         this.alertMessage.bool = true
         this.alertMessage.type = 'error'
         const allErrors = errors

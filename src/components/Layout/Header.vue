@@ -84,6 +84,10 @@
             }
           }, (error) => {
             // this.loading = false
+            if (error && !error.ok && error.body.message === 'Token has expired') {
+              this.$store.commit('setToken', null)
+              this.$router.push('signin')
+            }
             console.log('Error', error)
           })
       }

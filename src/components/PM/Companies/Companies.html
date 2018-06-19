@@ -31,7 +31,7 @@
                     <v-text-field v-model="editedCompany.name" label="Name"></v-text-field>
                   </v-flex>
                   <v-flex xs12>
-                    <v-text-field v-model="editedCompany.description" label="Description" multi-line></v-text-field>
+                    <v-text-field v-model="editedCompany.description" label="Description" multi-line rows="3"></v-text-field>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -39,7 +39,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="primary" @click.native="close">Cancel</v-btn>
-              <v-btn color="secondary" @click.native="save" :loading="loading">Save</v-btn>
+              <v-btn color="secondary" @click.native="save" :loading="loader.loading">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -47,7 +47,7 @@
           :headers="headers"
           :items="allCompanies"
           :search="search"
-          :loading="loading"
+          :loading="loader.loading"
         >
           <template slot="items" slot-scope="props">
             <td>{{ props.item.id }}</td>
@@ -59,7 +59,7 @@
               <v-btn icon class="mx-0" @click="editItem(props.item)">
                 <v-icon color="teal">edit</v-icon>
               </v-btn>
-              <v-btn icon class="mx-0" @click="deleteItem(props.item)">
+              <v-btn icon class="mx-0" @click="deleteItem(props.item)" :loading="props.item.deleting">
                 <v-icon color="pink">delete</v-icon>
               </v-btn>
             </td>

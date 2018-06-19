@@ -8,7 +8,13 @@
     data () {
       return {
         allCompanies: [],
-        loading: false,
+        loader: {
+          creating: false,
+          loading: false,
+          updating: false,
+          deleting: false
+        },
+        // loading: false,
         dialog: false,
         editedIndex: -1,
         search: '',
@@ -39,31 +45,65 @@
     methods: {
       editItem (item) {
         this.editedIndex = this.allCompanies.indexOf(item)
-        this.editedCompany = Object.assign({}, item)
+        this.editedCompany = {...item}
         this.dialog = true
-        console.log(item)
+        console.log(this.editedCompany)
       },
       deleteItem (item) {
         this.editedIndex = this.allCompanies.indexOf(item)
-        console.log(item)
+        this.editedCompany = {...item}
+        this.deleteCompany()
       },
       close () {
         this.dialog = false
         setTimeout(() => {
-          this.editedCompany = Object.assign({}, this.defaultItem)
+          this.editedCompany = { ...this.defaultItem }
           this.editedIndex = -1
         }, 300)
       },
       save () {
-        this.loading = true
-        this.editedCompany['user_id'] = 2
-        API.post('companies', this.editedCompany)
+        this.loader.loading = true
+        if (this.editedIndex === -1) {
+          API.post('companies', this.editedCompany)
+            .then((result) => {
+              this.loader.loading = false
+              console.log('Created', result)
+              this.dialog = false
+              this.allCompanies.unshift(result.body)
+            }, (error) => {
+              this.loader.loading = false
+              this.dialog = false
+              console.log('Error', error)
+            })
+            .catch(error => console.log(error))
+        } else this.updateCompany()
+      },
+      updateCompany () {
+        API.put(`companies/${this.editedCompany.id}`, this.editedCompany)
           .then((result) => {
-            this.loading = false
-            console.log('Success', result)
-            this.allCompanies.push(result)
+            this.loader.loading = false
+            console.log('Updated', result)
+            this.dialog = false
+            this.allCompanies.splice(this.editedIndex, 1, result.body)
           }, (error) => {
-            this.loading = false
+            this.loader.loading = false
+            this.dialog = false
+            console.log('Error', error)
+          })
+          .catch(error => console.log(error))
+      },
+      deleteCompany () {
+        if (!confirm('Do you really want to delete')) return
+        this.allCompanies[this.editedIndex]['deleting'] = true
+        API.delete(`companies/${this.editedCompany.id}`)
+          .then((result) => {
+            // this.loader.deleting = false
+            this.allCompanies[this.editedIndex]['deleting'] = false
+            console.log('Success', result)
+            this.dialog = false
+            this.allCompanies.splice(this.editedIndex, 1)
+          }, (error) => {
+            this.allCompanies[this.editedIndex]['deleting'] = false
             console.log('Error', error)
           })
           .catch(error => console.log(error))
@@ -75,17 +115,17 @@
       }
     },
     mounted () {
-      this.loading = true
+      this.loader.loading = true
       API.get('companies')
         .then((result) => {
-          this.loading = false
+          this.loader.loading = false
           console.log('Success', result)
           if (result && result.code === 401) {
             return
           }
           this.allCompanies = result.body.data
         }, (error) => {
-          this.loading = false
+          this.loader.loading = false
           console.log('Error', error)
         })
     }

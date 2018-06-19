@@ -60,7 +60,12 @@ Vue.use(VueResource)
 Vue.http.interceptors.push((request, next) => {
   request.headers.set('Authorization', `Bearer ${store.state.token}`)
   request.headers.set('Accept', 'application/json')
-  next()
+  next((response) => {
+    if (response.status === 400 || (response.status === 401 && (response.body.error === 'token_not_provided' || (response.body.error === 'token_expired' || (response.body.error === 'token_invalid'))))) {
+      store.commit('setToken', null)
+      router.go('signin')
+    }
+  })
 })
 
 //      Everything that makes the app 'vuetiful'

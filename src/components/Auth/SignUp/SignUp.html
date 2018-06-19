@@ -60,6 +60,7 @@
                 type="password"
                 label="Confirm Password"
                 required
+                :counter="8"
                 :error-messages="password_confirmationErrors"
                 @input="$v.signUpUser.password_confirmation.$touch()"
                 @blur="$v.signUpUser.password_confirmation.$touch()"

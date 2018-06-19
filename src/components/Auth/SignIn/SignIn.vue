@@ -20,6 +20,11 @@
           email: '',
           password: ''
         },
+        alertMessage: {
+          bool: false,
+          type: '',
+          messages: []
+        },
         loader: {
           creating: false
         }
@@ -42,12 +47,14 @@
     },
     methods: {
       signIn () {
+        if (this.$v.signInUser.$invalid) {
+          return
+        }
         this.loader.creating = true
         console.log(this.signUpUser)
-        // this.$http.post('http://localhost:8000/api/login', this.signInUser)
         API.post('login', this.signInUser)
           .then(result => {
-            console.log(result)
+            // console.log(result)
             if (result.data && result.data.token) {
               this.$store.commit('setToken', result.data.token)
               this.setUser(result.data.user)
@@ -56,12 +63,32 @@
             this.loader.creating = false
           }, error => {
             console.log(error)
+            this.alertMessage.bool = true
+            this.alertMessage.type = 'error'
+            this.alertMessage.messages = []
+            if (error.status === 401) {
+              this.alertMessage.messages.push(error.body.message)
+              this.dismissError()
+            }
+            if (error && error.body && error.body.errors) {
+              this.handleErrors(error.body.errors)
+              this.dismissError()
+            }
             this.loader.creating = false
           })
+      },
+      handleErrors (errors) {
+        const allErrors = errors
+        for (let key in allErrors) {
+          this.alertMessage.messages.push(allErrors[key].toString())
+        }
       },
       setUser (user) {
         console.log(user)
         this.$store.commit('setUser', user)
+      },
+      dismissError () {
+        setTimeout(() => { this.alertMessage.bool = false }, 10000)
       }
     }
   }
