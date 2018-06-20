@@ -61,7 +61,7 @@
           {icon: 'face', title: 'Sign Up', link: '/signup'},
           {icon: 'lock_open', title: 'Sign In', link: '/signin'}
         ]
-        if (this.$store.state.token !== null && this.$store.state.token !== undefined) {
+        if (this.$store.getters.getToken && this.$store.getters.getToken !== undefined) {
           menu = [
             {icon: 'account_circle', title: 'Users', link: '/'},
             {icon: 'dns', title: 'Companies', link: '/companies'},
@@ -79,13 +79,13 @@
             // this.loading = false
             console.log('Success', result)
             if (result && result.ok && result.status === 200) {
-              this.$store.commit('setToken', null)
+              this.$store.dispatch('logUserOut')
               this.$router.push('signin')
             }
           }, (error) => {
             // this.loading = false
             if (error && !error.ok && error.body.message === 'Token has expired') {
-              this.$store.commit('setToken', null)
+              this.$store.dispatch('logUserOut')
               this.$router.push('signin')
             }
             console.log('Error', error)

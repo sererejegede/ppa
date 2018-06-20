@@ -43,14 +43,19 @@ Vue.filter('date', function (value) {
 //      Almost the equivalent of Angular 5's HttpClient
 
 router.beforeEach((to, from, next) => {
+  // console.log(store.getters.getToken)
+  /* If the route to be accessed requires authentication */
+  console.log(to)
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    if (!store.state.token) {
+    // console.log(localStorage.getItem('loggedInUser'))
+    /* And the user isn't logged in, redirect to Sign in page */
+    if (localStorage.getItem('loggedInUser') === 'null' || localStorage.getItem('loggedInUser') === null) {
       next('signin')
-    } else {
-      next()
     }
+    // else if () {
+    //
+    // }
+    else next() // If the user is logged in, continue
   } else {
     next() // make sure to always call next()!
   }
@@ -58,11 +63,13 @@ router.beforeEach((to, from, next) => {
 
 Vue.use(VueResource)
 Vue.http.interceptors.push((request, next) => {
-  request.headers.set('Authorization', `Bearer ${store.state.token}`)
-  request.headers.set('Accept', 'application/json')
+  if (request.url !== 'http://localhost:8000/api/login') {
+    request.headers.set('Authorization', `Bearer ${store.getters.getToken}`)
+    request.headers.set('Accept', 'application/json')
+  }
   next((response) => {
-    if (response.status === 400 || (response.status === 401 && (response.body.error === 'token_not_provided' || (response.body.error === 'token_expired' || (response.body.error === 'token_invalid'))))) {
-      store.commit('setToken', null)
+    if (response.status === 400 || response.status === 401) {
+      store.dispatch('logUserOut')
       router.go('signin')
     }
   })
@@ -119,5 +126,12 @@ new Vue({
   el: '#app',
   router,
   store,
+  beforeCreate () {
+    this.$store.commit('initializeStore')
+  },
+  // beforeUpdate () {
+  //   console.log('before update')
+  //   this.$store.commit('initializeStore')
+  // },
   render: h => h(App)
 })

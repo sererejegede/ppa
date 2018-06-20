@@ -51,13 +51,11 @@
           return
         }
         this.loader.creating = true
-        console.log(this.signUpUser)
         API.post('login', this.signInUser)
           .then(result => {
-            // console.log(result)
-            if (result.data && result.data.token) {
-              this.$store.commit('setToken', result.data.token)
-              this.setUser(result.data.user)
+            console.log(result)
+            if (result.body && result.body.token) {
+              this.setUser(result.body)
               this.$router.push('companies')
             }
             this.loader.creating = false
@@ -83,9 +81,9 @@
           this.alertMessage.messages.push(allErrors[key].toString())
         }
       },
-      setUser (user) {
-        console.log(user)
-        this.$store.commit('setUser', user)
+      setUser (userData) {
+        this.$store.dispatch('setUser', userData)
+        // this.$store.dispatch('setToken', userData.token)
       },
       dismissError () {
         setTimeout(() => { this.alertMessage.bool = false }, 10000)
