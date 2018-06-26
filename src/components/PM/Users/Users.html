@@ -1,0 +1,51 @@
+<v-container>
+  <v-layout class="my-5">
+    <v-flex xs12 sm10 offset-sm1>
+      <!--<h3 class="display-2">Companies</h3>-->
+    </v-flex>
+  </v-layout>
+  <v-layout>
+      <v-flex xs12 sm12>
+        <v-card class="mb-5">
+          <v-card-title>
+            Users
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-card-title>
+          <v-data-table
+            :headers="headers"
+            :items="allUsers"
+            :search="search"
+            :loading="loader.loading"
+          >
+            <template slot="items" slot-scope="props">
+              <td>{{ props.item.id }}</td>
+              <td><img :src="props.item.profile_pic" width="30"></td>
+              <td><router-link :to="`users/${props.item.id}`">{{ props.item.name }}</router-link></td>
+              <td>{{ props.item.email }}</td>
+              <td>{{ props.item.role.name }}</td>
+              <td>{{ props.item.created_at | date}}</td>
+              <td>{{ props.item.updated_at | date}}</td>
+              <td class="justify-center layout px-0">
+                <!--<v-btn icon class="mx-0" @click="editItem(props.item)">-->
+                  <!--<v-icon color="teal">edit</v-icon>-->
+                <!--</v-btn>-->
+                <v-btn icon class="mx-0" @click="deleteItem(props.item)" :loading="props.item.deleting">
+                  <v-icon color="pink">delete</v-icon>
+                </v-btn>
+              </td>
+            </template>
+            <v-alert slot="no-results" :value="true" color="error" icon="warning">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
+          </v-data-table>
+        </v-card>
+      </v-flex>
+    </v-layout>
+</v-container>

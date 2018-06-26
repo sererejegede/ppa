@@ -1,0 +1,59 @@
+<v-app>
+  <v-navigation-drawer v-model="sideNav" temporary absolute>
+    <v-list class="pa-1">
+      <v-list-tile avatar v-if="getLoggedInUser.user">
+        <v-list-tile-avatar>
+          <img :src="getLoggedInUser.user.profile_pic" height="20">
+        </v-list-tile-avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>{{ getLoggedInUser.user.name.toUpperCase() }}</v-list-tile-title>
+        </v-list-tile-content>
+        <v-spacer></v-spacer>
+        <a @click="logUserOut"><v-icon tag="link">power_settings_new</v-icon></a>
+      </v-list-tile>
+      <v-divider></v-divider>
+      <v-list-tile v-for="menu in menuItems" :key="menu.title" @click="" :to="menu.link">
+        <v-list-tile-action>
+          <v-icon>{{ menu.icon}}</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>{{ menu.title}}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-spacer></v-spacer>
+    </v-list>
+  </v-navigation-drawer>
+  <v-toolbar class="primary">
+    <v-toolbar-side-icon @click.stop="sideNav = !sideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
+    <v-toolbar-title>
+      <router-link to="/" tag="span" style="cursor: pointer">Project Management</router-link>
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-toolbar-items class="hidden-xs-only">
+      <v-btn flat :to="menu.link" v-for="menu in menuItems" :key="menu.title">
+        <v-icon left>{{ menu.icon}}</v-icon>
+        {{ menu.title }}
+      </v-btn>
+      <v-btn flat v-if="getLoggedInUser.user">
+        <v-menu :nudge-width="20">
+          <v-btn flat slot="activator">
+            <v-avatar class="pr-2">
+              <img :src="getLoggedInUser.user.profile_pic" height="40" class="circle">
+            </v-avatar>
+            {{ getLoggedInUser.user.name }}
+            <v-icon dark>arrow_drop_down</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-tile>
+              <v-icon left>exit_to_app</v-icon>
+              <a @click="logUserOut">Logout</a>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </v-btn>
+    </v-toolbar-items>
+  </v-toolbar>
+  <main>
+    <router-view></router-view>
+  </main>
+</v-app>

@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
     },
     setUser (state, payload) {
       state.loggedInUser = payload
+      console.log(payload)
       localStorage.setItem('loggedInUser', JSON.stringify(payload))
     },
     logUserOut (state) {

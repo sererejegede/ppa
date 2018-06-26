@@ -82,6 +82,7 @@
         }
       },
       setUser (userData) {
+        userData.user.profile_pic = 'http://localhost:8000/' + userData.user.profile_pic
         this.$store.dispatch('setUser', userData)
         // this.$store.dispatch('setToken', userData.token)
       },

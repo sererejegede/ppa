@@ -27,6 +27,8 @@ import {
   VCheckbox,
   VAlert,
   VMenu,
+  VTabs,
+  VAvatar,
   transitions
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
@@ -39,23 +41,20 @@ Vue.filter('date', function (value) {
   }
 })
 
+/** Uppercase Filter */
+
 //      For the routing and route guarding and all
 //      Almost the equivalent of Angular 5's HttpClient
 
 router.beforeEach((to, from, next) => {
   // console.log(store.getters.getToken)
   /* If the route to be accessed requires authentication */
-  console.log(to)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // console.log(localStorage.getItem('loggedInUser'))
     /* And the user isn't logged in, redirect to Sign in page */
     if (localStorage.getItem('loggedInUser') === 'null' || localStorage.getItem('loggedInUser') === null) {
       next('signin')
-    }
-    // else if () {
-    //
-    // }
-    else next() // If the user is logged in, continue
+    } else next() // If the user is logged in, continue
   } else {
     next() // make sure to always call next()!
   }
@@ -69,8 +68,10 @@ Vue.http.interceptors.push((request, next) => {
   }
   next((response) => {
     if (response.status === 400 || response.status === 401) {
-      store.dispatch('logUserOut')
-      router.go('signin')
+      if (response.url !== 'http://localhost:8000/api/login') {
+        store.dispatch('logUserOut')
+        router.go('signin')
+      }
     }
   })
 })
@@ -101,6 +102,8 @@ Vue.use(Vuetify, {
     VCheckbox,
     VAlert,
     VMenu,
+    VTabs,
+    VAvatar,
     transitions
   },
   theme: {
