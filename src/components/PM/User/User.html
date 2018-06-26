@@ -2,35 +2,43 @@
   <v-layout>
     <v-flex xs12 sm4>
       <v-card>
-        <v-card-media>
-          <img :src="user.profile_pic" height="380">
+        <v-card-media class="cursor">
+          <img :src="user_image" height="380" class="pa-2" @click="triggerFileInput()">
         </v-card-media>
-        <!--<v-card-title primary-title>-->
-          <!--<div>-->
-            <!--<h3 class="headline mb-0">Kangaroo Valley Safari</h3>-->
-            <!--<div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>-->
-          <!--{{user.name}}-->
-          <!--</div>-->
-        <!--</v-card-title>-->
+        <input type="file" ref="user_image" style="display: none" accept="image/*" @change="changeImage">
       </v-card>
     </v-flex>
     <v-flex xs12 sm8 class="pl-3">
-      <v-card>
+      <v-card height="100%">
         <v-tabs slider-color="secondary" fixed-tabs>
           <v-tab ripple>Profile</v-tab>
           <v-tab ripple>Edit</v-tab>
           <v-tab-item>
             <v-card>
-              Profile
+              <v-card-title primary-title>
+                <div>
+                  <h3 class="headline mb-0">Profile</h3>
+                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet deserunt incidunt laborum perspiciatis rerum suscipit temporibus unde? Accusantium amet animi at cumque eligendi explicabo in incidunt quia, ullam unde, voluptate?</div>
+                </div>
+              </v-card-title>
             </v-card>
           </v-tab-item>
           <v-tab-item>
             <v-card>
-              Edit form
+              <v-card-title primary-title>
+                <div>
+                  <h3 class="headline mb-0">Edit form</h3>
+                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet deserunt incidunt laborum perspiciatis rerum suscipit temporibus unde? Accusantium amet animi at cumque eligendi explicabo in incidunt quia, ullam unde, voluptate?</div>
+                </div>
+              </v-card-title>
             </v-card>
           </v-tab-item>
         </v-tabs>
       </v-card>
     </v-flex>
+  </v-layout>
+  <v-layout>
+    <v-spacer></v-spacer>
+    <v-btn color="secondary" @click.stop="uploadImage()" :loading="loader.uploading">Submit</v-btn>
   </v-layout>
 </v-container>

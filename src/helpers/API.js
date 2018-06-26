@@ -12,6 +12,9 @@ export default {
   put (url, data = {}) {
     return Vue.http.put(`${API_URL}/${url}`, data)
   },
+  patch (url, data = {}) {
+    return Vue.http.patch(`${API_URL}/${url}`, data)
+  },
   delete (url) {
     return Vue.http.delete(`${API_URL}/${url}`)
   }

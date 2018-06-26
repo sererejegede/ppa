@@ -62,7 +62,10 @@ router.beforeEach((to, from, next) => {
 
 Vue.use(VueResource)
 Vue.http.interceptors.push((request, next) => {
-  if (request.url !== 'http://localhost:8000/api/login') {
+  if (request.url.search('uploadFile') > 0) {
+    request.headers.set('Authorization', `Bearer ${store.getters.getToken}`)
+    request.headers.set('Content-Type', 'multipart/form-data')
+  } else if (request.url !== 'http://localhost:8000/api/login' && request.url !== 'http://localhost:8000/api/uploadFile/:id') {
     request.headers.set('Authorization', `Bearer ${store.getters.getToken}`)
     request.headers.set('Accept', 'application/json')
   }

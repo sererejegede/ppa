@@ -8,10 +8,12 @@ export default {
       data () {
         return {
           loader: {
-            loading: false
+            loading: false,
+            uploading: false
           },
           user_id: this.$route.params.id,
-          user: {}
+          user: {},
+          user_image: 'http://localhost:8000/storage/profile_pics/default-user.png'
         }
       },
       mounted () {
@@ -19,7 +21,7 @@ export default {
         API.get(`users/${this.user_id}`)
           .then((result) => {
             this.loader.loading = false
-            console.log('Success', result)
+            // console.log('Success', result)
             this.user = result.body
             this.getProfilePic()
           }, (error) => {
@@ -29,12 +31,50 @@ export default {
       },
       methods: {
         getProfilePic () {
-          this.user.profile_pic = 'http://localhost:8000/' + this.user.profile_pic
+          if (this.user.profile_pic) {
+            this.user_image = 'http://localhost:8000/' + this.user.profile_pic
+          }
+        },
+        triggerFileInput () {
+          this.$refs.user_image.click()
+        },
+        uploadImage () {
+          console.log('Profile picture', this.$refs.user_image.files[0])
+          // const picture = {
+          //   profile_pic: this.$refs.user_image.files[0]
+          // }
+          let picture = new FormData()
+          picture.append('profile_pic', this.$refs.user_image.files[0], 'picture')
+          this.loader.uploading = true
+          API.patch(`uploadFile/${this.user_id}`, picture)
+            .then((result) => {
+              this.loader.uploading = false
+              console.log('Success', result)
+            }, (error) => {
+              this.loader.uploading = false
+              console.log('Error', error)
+            })
+        },
+        changeImage () {
+          if (this.$refs.user_image && this.$refs.user_image.files.length !== 0) {
+            // console.log('Image URL', URL.createObjectURL(this.$refs.user_image.files[0]))
+            this.user_image = URL.createObjectURL(this.$refs.user_image.files[0])
+          }
         }
+      },
+      computed: {
+        // changeImage () {
+        //   if (this.$refs.user_image) {
+        //     console.log('Image URL', URL.createObjectURL(this.$refs.user_image.files[0]))
+        //     this.user_image = URL.createObjectURL(this.$refs.user_image.files[0])
+        //   }
+        // }
       }
     }
 </script>
 
 <style scoped>
-
+  .cursor:hover {
+    cursor: pointer;
+  }
 </style>
