@@ -1,6 +1,6 @@
 <v-container>
-  <v-layout>
-    <v-flex xs12 sm4>
+  <v-layout row wrap>
+    <v-flex xs12 sm12 md4>
       <v-card>
         <v-card-media class="cursor">
           <img :src="user_image" height="380" class="pa-2" @click="triggerFileInput()">
@@ -8,7 +8,7 @@
         <input type="file" ref="user_image" style="display: none" accept="image/*" @change="changeImage">
       </v-card>
     </v-flex>
-    <v-flex xs12 sm8 class="pl-3">
+    <v-flex xs12 sm12 md8 class="">
       <v-card height="100%">
         <v-tabs slider-color="secondary" fixed-tabs>
           <v-tab ripple>Profile</v-tab>

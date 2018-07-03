@@ -50,7 +50,7 @@
           :loading="loader.loading"
         >
           <template slot="items" slot-scope="props">
-            <td>{{ props.item.id }}</td>
+            <td>{{ props.index + 1 }}</td>
             <td><router-link :to="`companies/${props.item.id}`">{{ props.item.name }}</router-link></td>
             <td>{{ props.item.description }}</td>
             <td>{{ props.item.created_at | date}}</td>

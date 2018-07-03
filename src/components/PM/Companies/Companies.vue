@@ -136,4 +136,7 @@
   td a{
     text-decoration: none;
   }
+  td a:hover{
+    text-decoration: underline;
+  }
 </style>

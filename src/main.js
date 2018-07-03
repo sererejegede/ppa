@@ -47,10 +47,8 @@ Vue.filter('date', function (value) {
 //      Almost the equivalent of Angular 5's HttpClient
 
 router.beforeEach((to, from, next) => {
-  // console.log(store.getters.getToken)
   /* If the route to be accessed requires authentication */
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // console.log(localStorage.getItem('loggedInUser'))
     /* And the user isn't logged in, redirect to Sign in page */
     if (localStorage.getItem('loggedInUser') === 'null' || localStorage.getItem('loggedInUser') === null) {
       next('signin')
@@ -62,7 +60,7 @@ router.beforeEach((to, from, next) => {
 
 Vue.use(VueResource)
 Vue.http.interceptors.push((request, next) => {
-  if (request.url.search('uploadFile') > 0) {
+  if (request.url.search('uploadFile') >= 0) { // File upload
     request.headers.set('Authorization', `Bearer ${store.getters.getToken}`)
     request.headers.set('Content-Type', 'multipart/form-data')
   } else if (request.url !== 'http://localhost:8000/api/login' && request.url !== 'http://localhost:8000/api/uploadFile/:id') {

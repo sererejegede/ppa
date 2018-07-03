@@ -17,7 +17,6 @@
                 type="email"
                 :error-messages="emailErrors"
                 @blur="$v.signInUser.email.$touch()"
-                @input="$v.signInUser.email.$touch()"
                 label="Email"></v-text-field>
             </v-flex>
             <v-flex>

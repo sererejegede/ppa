@@ -4,11 +4,18 @@
   export default {
     data () {
       return {
-        sideNav: false
+        sideNav: false,
+        user_image: 'http://localhost:8000/storage/profile_pics/default-user.png',
+        loader: {
+          loading: false
+        }
       }
     },
     computed: {
       getLoggedInUser () {
+        if (this.$store.state.loggedInUser && this.$store.state.loggedInUser.user && this.$store.state.loggedInUser.user.profile_pic) {
+          this.user_image = this.$store.state.loggedInUser.user.profile_pic
+        }
         return this.$store.state.loggedInUser
       },
       menuItems () {
@@ -28,16 +35,17 @@
     },
     methods: {
       logUserOut () {
+        this.loader.loading = true
         this.$http.post(`http://localhost:8000/api/logout`)
           .then((result) => {
-            // this.loading = false
-            console.log('Success', result)
+            this.loader.loading = false
             if (result && result.ok && result.status === 200) {
               this.$store.dispatch('logUserOut')
-              this.$router.push('signin')
+              const origin = window.location.origin
+              window.location.replace(`${origin}/signin`)
             }
           }, (error) => {
-            // this.loading = false
+            this.loader.loading = false
             if (error && !error.ok && error.body.message === 'Token has expired') {
               this.$store.dispatch('logUserOut')
               this.$router.push('signin')

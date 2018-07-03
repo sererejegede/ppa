@@ -58,5 +58,10 @@ export default {
 </script>
 
 <style scoped>
-
+  td a{
+    text-decoration: none;
+  }
+  td a:hover{
+    text-decoration: underline;
+  }
 </style>

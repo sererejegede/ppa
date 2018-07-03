@@ -1,9 +1,9 @@
 <v-app>
   <v-navigation-drawer v-model="sideNav" temporary absolute>
     <v-list class="pa-1">
-      <v-list-tile avatar v-if="getLoggedInUser.user">
+      <v-list-tile avatar v-if="getLoggedInUser && getLoggedInUser.user">
         <v-list-tile-avatar>
-          <img :src="getLoggedInUser.user.profile_pic" height="20">
+          <img :src="user_image" height="20">
         </v-list-tile-avatar>
         <v-list-tile-content>
           <v-list-tile-title>{{ getLoggedInUser.user.name.toUpperCase() }}</v-list-tile-title>
@@ -34,13 +34,13 @@
         <v-icon left>{{ menu.icon}}</v-icon>
         {{ menu.title }}
       </v-btn>
-      <v-btn flat v-if="getLoggedInUser.user">
+      <v-btn flat v-if="getLoggedInUser && getLoggedInUser.user">
         <v-menu :nudge-width="20">
-          <v-btn flat slot="activator">
+          <v-btn flat slot="activator" :loading="loader.loading">
             <v-avatar class="pr-2">
-              <img :src="getLoggedInUser.user.profile_pic" height="40" class="circle">
+              <img :src="user_image" height="40" class="circle">
             </v-avatar>
-            {{ getLoggedInUser.user.name }}
+            <span v-if="getLoggedInUser">{{ getLoggedInUser.user.name }}</span>
             <v-icon dark>arrow_drop_down</v-icon>
           </v-btn>
           <v-list>
