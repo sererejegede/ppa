@@ -1,41 +1,138 @@
+<!--<v-container>-->
+  <!--<div v-if="!loading && company !== null">-->
+    <!--&lt;!&ndash;<v-jumbotron>&ndash;&gt;-->
+      <!--<v-container fill-height>-->
+        <!--<v-layout align-center>-->
+          <!--<v-flex>-->
+            <!--<h3 class="display-3">{{ company.name }}</h3>-->
+            <!--<span class="subheading">{{ company.description }}</span>-->
+            <!--<v-divider class="my-3"></v-divider>-->
+          <!--</v-flex>-->
+        <!--</v-layout>-->
+      <!--</v-container>-->
+    <!--&lt;!&ndash;</v-jumbotron>&ndash;&gt;-->
+    <!--<v-container fluid grid-list-md>-->
+      <!--<v-layout row wrap>-->
+        <!--<v-flex v-for="project in projects" :key="project.id" xs12 sm6 md3 lg3 class="pa-1">-->
+          <!--<v-card height="100%">-->
+            <!--<v-card-title primary-title>-->
+              <!--<div>-->
+                <!--<h3 class="headline mb-0">{{ project.name }}</h3>-->
+                <!--<div>{{ project.description}}</div>-->
+              <!--</div>-->
+            <!--</v-card-title>-->
+            <!--&lt;!&ndash;<v-card-actions>&ndash;&gt;-->
+            <!--&lt;!&ndash;<v-spacer></v-spacer>&ndash;&gt;-->
+            <!--&lt;!&ndash;<v-btn flat class="secondary" :to="`companies/${company.id}`">&ndash;&gt;-->
+            <!--&lt;!&ndash;<v-icon left>arrow_forward</v-icon>&ndash;&gt;-->
+            <!--&lt;!&ndash;View Details&ndash;&gt;-->
+            <!--&lt;!&ndash;</v-btn>&ndash;&gt;-->
+            <!--&lt;!&ndash;</v-card-actions>&ndash;&gt;-->
+          <!--</v-card>-->
+        <!--</v-flex>-->
+      <!--</v-layout>-->
+    <!--</v-container>-->
+  <!--</div>-->
+  <!--<v-layout class="text-xs-center" v-if="loading">-->
+    <!--<v-flex xs12 sm10 offset-sm1>-->
+      <!--<v-progress-circular indeterminate color="secondary"></v-progress-circular>-->
+    <!--</v-flex>-->
+  <!--</v-layout>-->
+<!--</v-container>-->
 <v-container>
-  <div v-if="!loading && company !== null">
-    <v-jumbotron>
-      <v-container fill-height>
-        <v-layout align-center>
-          <v-flex>
-            <h3 class="display-3">{{ company.name }}</h3>
-            <span class="subheading">{{ company.description }}</span>
-            <v-divider class="my-3"></v-divider>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-jumbotron>
-    <v-container fluid grid-list-md>
-      <v-layout row wrap>
-        <v-flex v-for="project in company.projects" :key="project.id" xs12 sm6 md3 lg3 class="pa-1">
-          <v-card height="100%">
-            <v-card-title primary-title>
-              <div>
-                <h3 class="headline mb-0">{{ project.name }}</h3>
-                <div>{{ project.description}}</div>
-              </div>
-            </v-card-title>
-            <!--<v-card-actions>-->
-            <!--<v-spacer></v-spacer>-->
-            <!--<v-btn flat class="secondary" :to="`companies/${company.id}`">-->
-            <!--<v-icon left>arrow_forward</v-icon>-->
-            <!--View Details-->
-            <!--</v-btn>-->
-            <!--</v-card-actions>-->
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
-  <v-layout class="text-xs-center" v-if="loading">
+  <v-layout class="my-5">
     <v-flex xs12 sm10 offset-sm1>
-      <v-progress-circular indeterminate color="secondary"></v-progress-circular>
+      <!--<h3 class="display-2">Companies</h3>-->
+    </v-flex>
+  </v-layout>
+  <v-layout>
+    <v-flex xs12 sm12>
+      <v-card class="mb-5">
+        <v-card-title>
+          Projects
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-dialog v-model="dialog" max-width="500px">
+          <v-btn slot="activator" color="primary" dark class="mb-2">
+            <v-icon>add</v-icon>
+            Project
+          </v-btn>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12>
+                    <v-text-field v-model="editedProject.name" label="Name"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field v-model="editedProject.description" label="Description" multi-line rows="3"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field v-model="editedProject.days" type="number" label="Days"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-select :items="statuses" label="Status" v-model="editedProject.status">
+
+                    </v-select>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" @click.native="close">Cancel</v-btn>
+              <v-btn color="secondary" @click.native="save" :loading="loader.saving">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-data-table
+          :headers="headers"
+          :items="projects"
+          :search="search"
+          :loading="loader.loading"
+        >
+          <template slot="items" slot-scope="props">
+            <td>{{ props.index + 1 }}</td>
+            <td><router-link :to="`companies/${props.item.id}`">{{ props.item.name }}</router-link></td>
+            <td>{{ props.item.description }}</td>
+            <td>{{ props.item.days }}</td>
+            <td>
+              <v-chip
+                v-if="props.item.status"
+                :class="{
+                    success: props.item.status == 'COMPLETED',
+                    warning: props.item.status == 'PENDING',
+                    error: props.item.status == 'NOT STARTED',
+                  }">
+                {{ props.item.status }}
+              </v-chip>
+            </td>
+            <td>{{ props.item.created_at | date}}</td>
+            <td>{{ props.item.updated_at | date}}</td>
+            <td class="justify-center layout px-0">
+              <v-btn icon class="mx-0" @click="editItem(props.item)">
+                <v-icon color="teal">edit</v-icon>
+              </v-btn>
+              <v-btn icon class="mx-0" @click="deleteItem(props.item)" :loading="props.item.deleting">
+                <v-icon color="pink">delete</v-icon>
+              </v-btn>
+            </td>
+          </template>
+          <v-alert slot="no-results" :value="true" color="error" icon="warning">
+            Your search for "{{ search }}" found no results.
+          </v-alert>
+        </v-data-table>
+      </v-card>
     </v-flex>
   </v-layout>
 </v-container>

@@ -29,6 +29,7 @@ import {
   VMenu,
   VTabs,
   VAvatar,
+  VChip,
   transitions
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
@@ -105,6 +106,7 @@ Vue.use(Vuetify, {
     VMenu,
     VTabs,
     VAvatar,
+    VChip,
     transitions
   },
   theme: {
