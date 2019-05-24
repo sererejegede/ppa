@@ -70,7 +70,6 @@
             }
             if (error && error.body && error.body.errors) {
               this.handleErrors(error.body.errors)
-              this.dismissError()
             }
             this.loader.creating = false
           })
@@ -80,11 +79,9 @@
         for (let key in allErrors) {
           this.alertMessage.messages.push(allErrors[key].toString())
         }
+        this.dismissError()
       },
       setUser (userData) {
-        if (userData.user.profile_pic) {
-          userData.user.profile_pic = 'http://localhost:8000/' + userData.user.profile_pic
-        }
         this.$store.dispatch('setUser', userData)
         // this.$store.dispatch('setToken', userData.token)
       },

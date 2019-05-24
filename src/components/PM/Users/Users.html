@@ -25,7 +25,7 @@
             :loading="loader.loading"
           >
             <template slot="items" slot-scope="props">
-              <td>{{ props.item.id }}</td>
+              <td>{{ props.index + 1 }}</td>
               <td><img :src="props.item.profile_pic" width="30"></td>
               <td><router-link :to="`users/${props.item.id}`">{{ props.item.name }}</router-link></td>
               <td>{{ props.item.email }}</td>

@@ -1,9 +1,12 @@
 <v-container>
+  <v-alert v-model="alertMessage.bool" :color="alertMessage.type" transition="scale-transition" dismissible>
+    <div v-for="message in alertMessage.messages" :key="message">{{ message }}</div>
+  </v-alert>
   <v-layout row wrap>
     <v-flex xs12 sm12 md4>
       <v-card>
         <v-card-media class="cursor">
-          <img :src="user_image" height="380" class="pa-2" @click="triggerFileInput()">
+          <img :src="user.profile_pic || user_image" height="380" class="pa-2" @click="triggerFileInput()">
         </v-card-media>
         <input type="file" ref="user_image" style="display: none" accept="image/*" @change="changeImage">
       </v-card>
@@ -12,13 +15,25 @@
       <v-card height="100%">
         <v-tabs slider-color="secondary" fixed-tabs>
           <v-tab ripple>Profile</v-tab>
-          <v-tab ripple>Edit</v-tab>
+          <v-tab ripple v-if="isUserLoggedIn">Edit</v-tab>
           <v-tab-item>
             <v-card>
               <v-card-title primary-title>
                 <div>
-                  <h3 class="headline mb-0">Profile</h3>
-                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet deserunt incidunt laborum perspiciatis rerum suscipit temporibus unde? Accusantium amet animi at cumque eligendi explicabo in incidunt quia, ullam unde, voluptate?</div>
+                  <!--<h3 class="headline mb-0">Profile</h3>-->
+                  <!--<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet deserunt incidunt laborum perspiciatis rerum suscipit temporibus unde? Accusantium amet animi at cumque eligendi explicabo in incidunt quia, ullam unde, voluptate?</div>-->
+                  <v-list>
+                    <v-list-tile>
+                      <h1>{{ user.name }}</h1>
+                      <v-chip v-if="user.role">{{ user.role.name }}</v-chip>
+                    </v-list-tile>
+                    <v-list-tile>
+                      {{ user.email }}
+                    </v-list-tile>
+                    <!--<v-list-tile>-->
+                      <!--{{ user.role.name }}-->
+                    <!--</v-list-tile>-->
+                  </v-list>
                 </div>
               </v-card-title>
             </v-card>
@@ -28,7 +43,10 @@
               <v-card-title primary-title>
                 <div>
                   <h3 class="headline mb-0">Edit form</h3>
-                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet deserunt incidunt laborum perspiciatis rerum suscipit temporibus unde? Accusantium amet animi at cumque eligendi explicabo in incidunt quia, ullam unde, voluptate?</div>
+                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet deserunt incidunt laborum
+                    perspiciatis rerum suscipit temporibus unde? Accusantium amet animi at cumque eligendi explicabo in
+                    incidunt quia, ullam unde, voluptate?
+                  </div>
                 </div>
               </v-card-title>
             </v-card>

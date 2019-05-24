@@ -47,7 +47,6 @@
         this.editedIndex = this.allCompanies.indexOf(item)
         this.editedCompany = {...item}
         this.dialog = true
-        console.log(this.editedCompany)
       },
       deleteItem (item) {
         this.editedIndex = this.allCompanies.indexOf(item)
@@ -67,7 +66,6 @@
           API.post('companies', this.editedCompany)
             .then((result) => {
               this.loader.loading = false
-              console.log('Created', result)
               this.dialog = false
               this.allCompanies.unshift(result.body)
             }, (error) => {
@@ -82,7 +80,6 @@
         API.put(`companies/${this.editedCompany.id}`, this.editedCompany)
           .then((result) => {
             this.loader.loading = false
-            console.log('Updated', result)
             this.dialog = false
             this.allCompanies.splice(this.editedIndex, 1, result.body)
           }, (error) => {

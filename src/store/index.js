@@ -17,9 +17,9 @@ export const store = new Vuex.Store({
       }
     },
     setUser (state, payload) {
-      if (payload.user.profile_pic && payload.user.profile_pic.search('http://localhost:8000/') < 0) {
-        payload.user.profile_pic = 'http://localhost:8000/' + payload.user.profile_pic
-      }
+      // if (payload.user.profile_pic && payload.user.profile_pic.search('http://localhost:8000/') < 0) {
+      //   payload.user.profile_pic = 'http://localhost:8000/' + payload.user.profile_pic
+      // }
       state.loggedInUser = payload
       localStorage.setItem('loggedInUser', JSON.stringify(payload))
     },
@@ -29,12 +29,12 @@ export const store = new Vuex.Store({
         state.loggedInUser.user = null
       }
       localStorage.removeItem('loggedInUser')
-    },
-    setProfilePic (state) {
-      if (state.loggedInUser.user.profile_pic) {
-        state.loggedInUser.user.profile_pic = 'http://localhost:8000/' + state.loggedInUser.user.profile_pic
-      }
     }
+    // setProfilePic (state) {
+    //   if (state.loggedInUser.user.profile_pic) {
+    //     state.loggedInUser.user.profile_pic = 'http://localhost:8000/' + state.loggedInUser.user.profile_pic
+    //   }
+    // }
   },
   actions: {
     setToken (state, payload) {
@@ -45,10 +45,10 @@ export const store = new Vuex.Store({
     },
     logUserOut (state) {
       state.commit('logUserOut')
-    },
-    setProfilePic (state) {
-      state.commit('setProfilePic')
     }
+    // setProfilePic (state) {
+    //   state.commit('setProfilePic')
+    // }
   },
   getters: {
     loggedInUser (state) {

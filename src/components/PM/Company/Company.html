@@ -77,13 +77,11 @@
                   <v-flex xs12>
                     <v-text-field v-model="editedProject.description" label="Description" multi-line rows="3"></v-text-field>
                   </v-flex>
-                  <v-flex xs12>
+                  <v-flex xs12 sm4>
                     <v-text-field v-model="editedProject.days" type="number" label="Days"></v-text-field>
                   </v-flex>
-                  <v-flex xs12>
-                    <v-select :items="statuses" label="Status" v-model="editedProject.status">
-
-                    </v-select>
+                  <v-flex xs12 sm8>
+                    <v-select :items="statuses" v-model="editedProject.status" label="Status"></v-select>
                   </v-flex>
                 </v-layout>
               </v-container>

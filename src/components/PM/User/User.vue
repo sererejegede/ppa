@@ -13,7 +13,12 @@ export default {
           },
           user_id: this.$route.params.id,
           user: {},
-          user_image: 'http://localhost:8000/storage/profile_pics/default-user.png'
+          user_image: 'http://localhost:8000/storage/profile_pics/default-user.png',
+          alertMessage: {
+            bool: false,
+            type: '',
+            messages: []
+          }
         }
       },
       mounted () {
@@ -21,20 +26,14 @@ export default {
         API.get(`users/${this.user_id}`)
           .then((result) => {
             this.loader.loading = false
-            // console.log('Success', result)
+            console.log('Success', result)
             this.user = result.body
-            this.getProfilePic()
           }, (error) => {
             this.loader.loading = false
             console.log('Error', error)
           })
       },
       methods: {
-        getProfilePic () {
-          if (this.user.profile_pic) {
-            this.user_image = this.$store.state.loggedInUser.user.profile_pic
-          }
-        },
         triggerFileInput () {
           this.$refs.user_image.click()
         },
@@ -46,29 +45,35 @@ export default {
             .then((result) => {
               this.loader.uploading = false
               console.log('Success', result)
-              if (parseInt(this.$store.state.loggedInUser.user.id, 10) === parseInt(result.body.user.id)) {
+              if (parseInt(this.$store.state.loggedInUser.user.id, 10) === parseInt(result.body.user.id, 10)) {
                 this.$store.dispatch('setUser', result.body)
                 // this.$store.dispatch('setProfilePic')
-                this.getProfilePic()
               }
             }, (error) => {
               this.loader.uploading = false
+              this.alertMessage.bool = true
+              this.alertMessage.type = 'error'
+              this.alertMessage.messages = []
+              if (error.status === 401 || error.status === 422) {
+                this.alertMessage.messages.push(error.body.message)
+                this.dismissError()
+              }
               console.log('Error', error)
             })
         },
         changeImage () {
           if (this.$refs.user_image && this.$refs.user_image.files.length !== 0) {
-            this.user_image = URL.createObjectURL(this.$refs.user_image.files[0])
+            this.user.profile_pic = URL.createObjectURL(this.$refs.user_image.files[0])
           }
+        },
+        dismissError () {
+          setTimeout(() => { this.alertMessage.bool = false }, 10000)
         }
       },
       computed: {
-        // changeImage () {
-        //   if (this.$refs.user_image) {
-        //     console.log('Image URL', URL.createObjectURL(this.$refs.user_image.files[0]))
-        //     this.user_image = URL.createObjectURL(this.$refs.user_image.files[0])
-        //   }
-        // }
+        isUserLoggedIn () {
+          return this.$store.state.loggedInUser.user.id.toString() === this.user_id
+        }
       }
     }
 </script>

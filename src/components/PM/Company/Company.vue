@@ -50,6 +50,11 @@
         return this.editedIndex === -1 ? 'New Project' : 'Edit Project'
       }
     },
+    watch: {
+      dialog (val) {
+        val || this.close()
+      }
+    },
     created () {},
     mounted () {
       this.loader.loading = true
@@ -123,7 +128,6 @@
         API.delete(`projects/${this.editedProject.id}`)
           .then((result) => {
             this.projects[this.editedIndex]['deleting'] = false
-            console.log('Success', result)
             this.dialog = false
             this.projects.splice(this.editedIndex, 1)
           }, (error) => {
